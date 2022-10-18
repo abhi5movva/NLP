@@ -12,9 +12,6 @@ if not {"word2vec.model", "word2vec.model.vectors.npy"}.issubset(set(os.listdir(
     wv = gensim.downloader.load("word2vec-google-news-300")
     wv.save("./word2vec.model")
 
-    print("Download complete.")
-
-
 if not "english-words.txt" in os.listdir():
     print("Downloading list of English words...")
 
@@ -28,7 +25,4 @@ if not "english-words.txt" in os.listdir():
     with open("./english-words.txt", "w") as fout:
         fout.write("\n".join(words))
 
-    print("Download complete.")
-
-
-print("Setup complete.")
+ print("Setup complete.")
