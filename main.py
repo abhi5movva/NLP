@@ -45,19 +45,11 @@ def find_possible_vectorized(guess, reported_sim, words_to_consider):
     # num_words x features @ features x 1 = num_words x 1
     numerator = words_matrix @ guess_v  # dot product of every datapoint with guess_v
 
-    # words_matrix @ words_matrix.T --> the squares of the matrix are on the diagonal
-    # we want to avoid computing all the non-diagonal elements somehow
-    # we can achieve this with einstein summation:
-    #   np.einsum('ij,jk') is the normal matrix product
-    #   np.einsum('ij,ji') gives us the sum over all diagonal elements of the matrix product
-    #   np.einsum('ij,ji->i') unforces the sum operation, so just returns the elements of the diagonal
-    # dim: num_words x features \w features x num_words --> num_words x 1
+  
     norms = np.sqrt(np.einsum('ij,ji->i', words_matrix, words_matrix.T))
 
     denominator = norms * np.linalg.norm(guess_v, 2)  # elem-multiply by norm of guess, denominator --> (num_words x 1)
 
-    # NOTE: We do not have to do 1 - cosine, because spatial.distance.cosine calculates cosine DISTANCE
-    # Whereas I here calculate cosine SIMILARITY directly
     cosines = (numerator / denominator) * 100  # num_words x 1, cosines[i] = SEMANTLE cosine of guess with ith wv
 
     p_bar.update(1)
@@ -95,7 +87,7 @@ def make_list(words):
     return "'" + "', '".join(words[:-1]) + "', and '" + words[-1] + "'"
 
 
-# Start guessing process
+# Guessing process
 def do_run():
     possible = set(english_words)
 
